@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zypp Weather Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js" defer></script>
+    <script src="/static/js/dashboard.js" defer></script>
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <main class="container">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Dutch Weather Intelligence</p>
+          <h1>Buienradar Data Operations Panel</h1>
+          <p class="subtitle">
+            Ingestion, analysis, and automation controls in one place. Built with FastAPI + SQLite.
+          </p>
+        </div>
+        <div class="actions">
+          <button id="btn-ingest" class="btn btn-primary">Ingest Latest Snapshot</button>
+          <button id="btn-refresh" class="btn btn-ghost">Refresh Insights</button>
+        </div>
+      </header>
+
+      <section class="grid kpi-grid">
+        <article class="card">
+          <h2>Highest Temperature</h2>
+          <p id="highest-temp" class="metric">-</p>
+          <small id="highest-meta">-</small>
+        </article>
+        <article class="card">
+          <h2>Average Temperature</h2>
+          <p id="avg-temp" class="metric">-</p>
+          <small>Across all collected measurements</small>
+        </article>
+        <article class="card">
+          <h2>Biggest Feel Gap</h2>
+          <p id="feel-gap" class="metric">-</p>
+          <small id="feel-meta">-</small>
+        </article>
+        <article class="card">
+          <h2>North Sea Station</h2>
+          <p id="north-sea" class="metric">-</p>
+          <small id="north-sea-meta">-</small>
+        </article>
+      </section>
+
+      <section class="grid split-grid">
+        <article class="card chart-card">
+          <div class="card-head">
+            <h2>Average Temperature Trend</h2>
+            <span id="points-count">0 points</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="tempChart" aria-label="Temperature trend chart"></canvas>
+          </div>
+          <div class="points-panel">
+            <h3>Data Points</h3>
+            <div class="points-table-wrap">
+              <table class="points-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Avg Temperature (C)</th>
+                  </tr>
+                </thead>
+                <tbody id="temp-points-body">
+                  <tr>
+                    <td colspan="2">No data yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="card scheduler-card">
+          <h2>Scheduler Control</h2>
+          <p class="muted">Run ingestion automatically every N minutes.</p>
+          <div class="scheduler-controls">
+            <label for="interval">Interval (minutes)</label>
+            <input id="interval" type="number" min="1" max="180" value="{{ default_interval }}" />
+            <div class="actions compact">
+              <button id="btn-start" class="btn btn-primary">Start</button>
+              <button id="btn-stop" class="btn btn-danger">Stop</button>
+            </div>
+          </div>
+          <div class="status-block">
+            <p id="scheduler-status" class="status-pill">Status: Unknown</p>
+            <p id="scheduler-next" class="muted">Next run: -</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2>Activity Log</h2>
+        <pre id="activity-log" class="log-box">Ready.</pre>
+      </section>
+    </main>
+  </body>
+</html>
